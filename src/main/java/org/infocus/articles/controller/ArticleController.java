@@ -32,11 +32,11 @@ import javax.validation.constraints.NotNull;
  */
 @RestController
 @RequestMapping("/api/v0/infocus")
-public class ArticlesController {
+public class ArticleController {
 
   private final ArticleService articleService;
 
-  public ArticlesController(ArticleService articleService) {
+  public ArticleController(ArticleService articleService) {
     this.articleService = articleService;
   }
 

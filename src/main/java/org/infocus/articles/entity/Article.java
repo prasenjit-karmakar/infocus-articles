@@ -1,9 +1,13 @@
 package org.infocus.articles.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -24,6 +28,9 @@ public class Article extends BaseEntity implements Serializable {
 
   @Column(nullable = false)
   private String author;
+
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
+  private Set<Comment> comments = new HashSet<>(0);
 
 
   public String getName() {
@@ -48,5 +55,13 @@ public class Article extends BaseEntity implements Serializable {
 
   public void setAuthor(String author) {
     this.author = author;
+  }
+
+  public Set<Comment> getComments() {
+    return comments;
+  }
+
+  public void setComments(Set<Comment> comments) {
+    this.comments = comments;
   }
 }
