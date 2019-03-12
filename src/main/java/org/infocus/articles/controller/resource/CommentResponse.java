@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class CommentResponse {
   private String id;
   private String username;
+  private String comment;
 
   public String getId() {
     return id;
@@ -28,5 +29,13 @@ public class CommentResponse {
 
   public void setUsername(String username) {
     this.username = username;
+  }
+
+  public String getComment() {
+    return comment;
+  }
+
+  public void setComment(String comment) {
+    this.comment = comment;
   }
 }

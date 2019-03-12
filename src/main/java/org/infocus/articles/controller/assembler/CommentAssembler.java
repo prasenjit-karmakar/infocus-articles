@@ -19,6 +19,7 @@ public final class CommentAssembler {
     final Comment comment = new Comment();
     comment.setUsername(commentRequest.getUsername());
     comment.setComment(commentRequest.getComment());
+    comment.setEmail(commentRequest.getEmail());
     return comment;
   }
 
@@ -26,6 +27,7 @@ public final class CommentAssembler {
     final CommentResponse commentResponse = new CommentResponse();
     commentResponse.setUsername(comment.getUsername());
     commentResponse.setId(comment.getId());
+    commentResponse.setComment(comment.getComment());
     return commentResponse;
   }
 

@@ -29,6 +29,9 @@ public class Comment extends BaseEntity implements Serializable {
   private String username;
 
   @Column(nullable = false)
+  private String email;
+
+  @Column(nullable = false)
   private String comment;
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -57,5 +60,13 @@ public class Comment extends BaseEntity implements Serializable {
 
   public void setArticle(Article article) {
     this.article = article;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
   }
 }
