@@ -6,6 +6,7 @@ import org.infocus.articles.controller.resource.CommentResponse;
 import org.infocus.articles.entity.Comment;
 import org.infocus.articles.service.CommentService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +33,8 @@ public class CommentController {
   }
 
   @PreAuthorize("hasRole('ROLE_USER')")
-  @PostMapping("/{ARTICLE_ID}/comments")
+  @PostMapping(value = "/{ARTICLE_ID}/comments", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces =
+      MediaType.APPLICATION_JSON_UTF8_VALUE)
   public ResponseEntity<CommentResponse> postComment(@PathVariable("ARTICLE_ID") String articleId,
       @Valid @RequestBody CommentRequest commentRequest) {
     final Comment comment = commentService.postComment(CommentAssembler.toCommentEntity(commentRequest), articleId);

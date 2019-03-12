@@ -41,7 +41,8 @@ public class ArticleController {
   }
 
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  @PostMapping("/articles")
+  @PostMapping(value = "/articles",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces =
+      MediaType.APPLICATION_JSON_UTF8_VALUE)
   public ResponseEntity<ArticleResponse> createArticle(@Valid @RequestBody ArticleRequest articleRequest) {
     final Article article = articleService.postArticle(ArticleAssembler.toArticleEntity(articleRequest));
     return new ResponseEntity(ArticleAssembler.toBaseArticleResponse(article), HttpStatus.OK);

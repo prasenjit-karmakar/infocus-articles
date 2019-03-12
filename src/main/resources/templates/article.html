@@ -34,6 +34,8 @@
 </head>
 
 <body>
+<div id="load" style="display:none"></div>
+
 <section class="bg-primary" id="about">
 <div class="container">
             <div class="row">
@@ -41,7 +43,6 @@
                     <h2 class="section-heading">{{article.name}}</h2>
                     <h3>                                    -  {{article.author}}</h3>
                 </div>
-
             </div>
         </div>
 </section>
@@ -50,13 +51,40 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 text-center">
                 {{article.content}}
+                <hr class="primary">
             </div>
         </div>
+        
+        <div id="respond">
 
+            <h3>Leave a Comment</h3>
+<form id="commentForm" action="JavaScript:postComment()">
+                <label for="comment_author" class="required">Your name</label>
+                <input type="text" name="comment_author" id="comment_author" value="" tabindex="1" required="required">
+
+                <label for="comment_email" class="required">Your email</label>
+                <input type="email" name="email" id="comment_email" value="" tabindex="2" required="required">
+
+                <label for="comment" class="required">Your message</label>
+                <textarea name="comment" id="comment" rows="4" tabindex="4"  required="required"></textarea>
+            
+                <input name="submit" id="postCommentBtn" type="submit" value="Submit"/>
+</form>
+        </div>
+
+        <div>
+            <br/>
+            {% for comment in article.comments %}
+            <b>{{ comment.username }} </b> wrote:- {{ comment.comment }}
+            <br/>
+            {% else %}
+            <b>No one has commented yet. Be the first!</b>
+            {% endfor %}
+        </div>
     </div>
 </section>
 
-<div id="footer">
+<div id="footer_index">
         <div class="container">
             <p>
                 <i class="fa fa-copyright" aria-hidden="true"></i> Infocus Social @ 2019
@@ -73,6 +101,64 @@
             </p>
         </div>
 </div>
+
+<script>
+function postComment() {
+  //validateCommentForm();
+  var xhttp = new XMLHttpRequest();
+  var commentBody = {};
+  commentBody.username = document.getElementById("comment_author").value;
+  commentBody.email = document.getElementById("comment_email").value;
+  commentBody.comment =  document.getElementById("comment").value;
+  
+  xhttp.onreadystatechange = function() {
+    startLoader();
+    if (this.readyState == 4 && this.status == 200) {
+	  window.location.href = 'http://www.infocussocial.org.in/api/v0/infocus/view/articles/{{article.id}}';
+    }
+	else if(this.readyState == 4 && this.status != 200){
+	  alert("Oops! Your comment could not be posted. Please try again later.");
+	  commentFormCleanUp();
+	  stopLoader();
+    }
+  };
+  xhttp.open("POST", "http://www.infocussocial.org.in/api/v0/infocus/articles/{{article.id}}/comments", true);
+  xhttp.setRequestHeader("Access-Control-Allow-Origin","*");
+  xhttp.setRequestHeader("Accept", 'application/json');
+  xhttp.setRequestHeader("Content-Type", 'application/json'); 
+  xhttp.setRequestHeader("Authorization", "Basic " + btoa("website_client" + ":" + "infocususer"));
+  xhttp.send(JSON.stringify(commentBody));
+  
+  validateCommentForm()
+  {
+  if(document.getElementById("comment_author").value == '' || document.getElementById("comment_email").value == '' 
+  || document.getElementById("comment").value == '' )
+  {
+  alert("Please fill the required fields");
+  return;
+  }
+  }
+  
+  function stopLoader()
+  {
+    var loadingDiv = document.getElementById("load");
+    loadingDiv.style.display = "none";
+  }
+
+ function startLoader()
+  {
+    var loadingDiv = document.getElementById("load");
+    loadingDiv.style.display = "block";
+  }
+
+function commentFormCleanUp()
+{
+ document.getElementById("comment_author").value = '';
+ document.getElementById("comment_email").value = '';
+ document.getElementById("comment").value = '';
+}
+}
+</script>
 
 </body>
 
