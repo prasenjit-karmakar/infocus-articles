@@ -104,7 +104,6 @@
 
 <script>
 function postComment() {
-  //validateCommentForm();
   var xhttp = new XMLHttpRequest();
   var commentBody = {};
   commentBody.username = document.getElementById("comment_author").value;
@@ -128,16 +127,6 @@ function postComment() {
   xhttp.setRequestHeader("Content-Type", 'application/json'); 
   xhttp.setRequestHeader("Authorization", "Basic " + btoa("website_client" + ":" + "infocususer"));
   xhttp.send(JSON.stringify(commentBody));
-  
-  validateCommentForm()
-  {
-  if(document.getElementById("comment_author").value == '' || document.getElementById("comment_email").value == '' 
-  || document.getElementById("comment").value == '' )
-  {
-  alert("Please fill the required fields");
-  return;
-  }
-  }
   
   function stopLoader()
   {
