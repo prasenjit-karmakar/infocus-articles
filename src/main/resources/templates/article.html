@@ -75,7 +75,7 @@
         <div>
             <br/>
             {% for comment in article.comments %}
-            <b>{{ comment.username }} </b> wrote:- {{ comment.comment }}
+            <b>{{ comment.username }} </b> wrote on {{comment.createdDate | date("MM-dd-yyyy")}} :- {{ comment.comment }}
             <br/>
             {% else %}
             <b>No one has commented yet. Be the first!</b>
