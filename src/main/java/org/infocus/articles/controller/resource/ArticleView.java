@@ -3,15 +3,24 @@ package org.infocus.articles.controller.resource;
 import java.util.List;
 
 /**
- * Article pebble resource.
+ * Article pebble resource for display.
  *
  * @author prasenjitkarmakar
  */
 public class ArticleView {
 
+  private String id;
   private String name;
   private String author;
   private List<String> sections;
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
+  }
 
   public String getName() {
     return name;

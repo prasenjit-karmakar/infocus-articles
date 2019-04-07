@@ -79,6 +79,7 @@ public class ArticleController {
 
   private ArticleView getArticleView(Article article) {
     final ArticleView articleViewResource = new ArticleView();
+    articleViewResource.setId(article.getId());
     articleViewResource.setName(article.getName());
     articleViewResource.setAuthor(article.getAuthor());
     articleViewResource.setSections(Arrays.asList(article.getContent().split("\\n")));
