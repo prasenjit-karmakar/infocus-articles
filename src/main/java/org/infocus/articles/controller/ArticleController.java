@@ -3,6 +3,7 @@ package org.infocus.articles.controller;
 import org.infocus.articles.controller.assembler.ArticleAssembler;
 import org.infocus.articles.controller.resource.ArticleRequest;
 import org.infocus.articles.controller.resource.ArticleResponse;
+import org.infocus.articles.controller.resource.ArticleView;
 import org.infocus.articles.entity.Article;
 import org.infocus.articles.service.ArticleService;
 import org.infocus.articles.util.PlatformUtil;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +43,7 @@ public class ArticleController {
   }
 
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  @PostMapping(value = "/articles",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces =
+  @PostMapping(value = "/articles", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces =
       MediaType.APPLICATION_JSON_UTF8_VALUE)
   public ResponseEntity<ArticleResponse> createArticle(@Valid @RequestBody ArticleRequest articleRequest) {
     final Article article = articleService.postArticle(ArticleAssembler.toArticleEntity(articleRequest));
@@ -58,19 +60,28 @@ public class ArticleController {
   @GetMapping(value = "/view/articles/{articleId}", produces = MediaType.TEXT_HTML_VALUE)
   public ModelAndView viewArticle(@PathVariable("articleId") @NotNull final String articleId) {
     final Article article = articleService.getArticle(articleId);
+    final ArticleView articleViewResource = getArticleView(article);
     ModelAndView articleView = new ModelAndView();
-    articleView.addObject("article", article);
+    articleView.addObject("article", articleViewResource);
     articleView.setViewName("article");
     return articleView;
   }
-
+  
   @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
   @GetMapping("/articles")
   public ResponseEntity<ArticleResponse> getAllArticles(@RequestParam(value = "page", required = false) Integer page,
-                                                        @RequestParam(value = "size", required = false) Integer size) {
+      @RequestParam(value = "size", required = false) Integer size) {
     PlatformUtil.validateGetAllArticlesRequest(page, size);
     final List<Article> articles = articleService.getAllArticles(page, size);
     return new ResponseEntity(articles.stream().map(article -> ArticleAssembler.toBaseArticleResponse(article))
         .collect(Collectors.toList()), HttpStatus.OK);
+  }
+
+  private ArticleView getArticleView(Article article) {
+    final ArticleView articleViewResource = new ArticleView();
+    articleViewResource.setName(article.getName());
+    articleViewResource.setAuthor(article.getAuthor());
+    articleViewResource.setSections(Arrays.asList(article.getContent().split("\\n")));
+    return articleViewResource;
   }
 }
