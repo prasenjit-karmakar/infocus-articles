@@ -1,6 +1,9 @@
 package org.infocus.articles.controller.resource;
 
+import org.infocus.articles.entity.Comment;
+
 import java.util.List;
+import java.util.Set;
 
 /**
  * Article pebble resource for display.
@@ -13,6 +16,7 @@ public class ArticleView {
   private String name;
   private String author;
   private List<String> sections;
+  private Set<Comment> comments;
 
   public String getId() {
     return id;
@@ -44,5 +48,13 @@ public class ArticleView {
 
   public void setSections(List<String> sections) {
     this.sections = sections;
+  }
+
+  public Set<Comment> getComments() {
+    return comments;
+  }
+
+  public void setComments(Set<Comment> comments) {
+    this.comments = comments;
   }
 }

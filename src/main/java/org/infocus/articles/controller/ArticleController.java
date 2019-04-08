@@ -83,6 +83,7 @@ public class ArticleController {
     articleViewResource.setName(article.getName());
     articleViewResource.setAuthor(article.getAuthor());
     articleViewResource.setSections(Arrays.asList(article.getContent().split("\\n")));
+    articleViewResource.setComments(article.getComments());
     return articleViewResource;
   }
 }
