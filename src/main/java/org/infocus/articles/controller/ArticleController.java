@@ -7,10 +7,12 @@ import org.infocus.articles.controller.resource.ArticleView;
 import org.infocus.articles.entity.Article;
 import org.infocus.articles.service.ArticleService;
 import org.infocus.articles.util.PlatformUtil;
+import org.infocus.articles.util.constants.DataConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,7 +70,7 @@ public class ArticleController {
     articleView.setViewName("article");
     return articleView;
   }
-  
+
   @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
   @GetMapping("/articles")
   public ResponseEntity<ArticleResponse> getAllArticles(@RequestParam(value = "page", required = false) Integer page,
@@ -83,7 +87,9 @@ public class ArticleController {
     articleViewResource.setName(article.getName());
     articleViewResource.setAuthor(article.getAuthor());
     articleViewResource.setSections(Arrays.asList(article.getContent().split("\\n")));
-    articleViewResource.setComments(article.getComments());
+    if (!CollectionUtils.isEmpty(article.getComments())) {
+      articleViewResource.setComments(article.getComments().stream().sorted(DataConstants.COMMENT_COMPARATOR).collect(Collectors.toList()));
+    }
     return articleViewResource;
   }
 }

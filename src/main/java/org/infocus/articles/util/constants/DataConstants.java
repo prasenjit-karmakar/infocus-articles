@@ -1,7 +1,9 @@
 package org.infocus.articles.util.constants;
 
+import org.infocus.articles.entity.Comment;
 import org.springframework.data.domain.Sort;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -21,6 +23,7 @@ public final class DataConstants {
   public static final int MAX_PAGE_SIZE = 10;
   public static final String DEFAULT_SORT_BY = "createdDate";
   public static final int MAX_PAGE_INDEX = 10;
+  public static final Comparator<Comment> COMMENT_COMPARATOR = (o1, o2) -> o2.getCreatedDate().compareTo(o1.getCreatedDate());
 
   private DataConstants() {
   }
